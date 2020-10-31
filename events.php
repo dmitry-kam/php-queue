@@ -14,7 +14,7 @@ pcntl_signal_dispatch();
 class EventsClass {
     public $accountsQty = 1000;
     public $eventsQty = 10000;
-    public $maxSendPerTime = 20;
+    public $maxSendPerTime = 100;
     protected $eventsQueue;
 
     public function __construct() {
@@ -47,7 +47,7 @@ class EventsClass {
 
         while ($wereSended < $this->eventsQty) {
             $fp = fopen(__DIR__.'/events/'.$chunkIterator.".json", "w");
-            fwrite($fp, json_encode((object)$chunkArr = array_slice($this->eventsQueue, $wereSended, rand(5, $this->maxSendPerTime), true)));
+            fwrite($fp, json_encode((object)$chunkArr = array_slice($this->eventsQueue, $wereSended, rand($this->maxSendPerTime/2, $this->maxSendPerTime), true)));
             fclose($fp);
             $wereSended += count($chunkArr);
             $chunkIterator += 1;
